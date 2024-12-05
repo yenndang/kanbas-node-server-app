@@ -1,4 +1,8 @@
+import "dotenv/config";
 import express from "express";
+import mongoose from "mongoose"; // load the mongoose library
+const CONNECTION_STRING =
+  process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kanbas";
 import Hello from "./Hello.js";
 import Lab5 from "./Lab5/index.js";
 import CourseRoutes from "./Kanbas/Courses/routes.js";
@@ -34,6 +38,8 @@ if (process.env.NODE_ENV !== "development") {
 }
 app.use(session(sessionOptions));
 app.use(express.json());
+mongoose.connect(CONNECTION_STRING);
+console.log(CONNECTION_STRING);
 UserRoutes(app);
 CourseRoutes(app);
 ModuleRoutes(app);
@@ -42,3 +48,12 @@ EnrollmentRoutes(app);
 Lab5(app);
 Hello(app);
 app.listen(process.env.PORT || 4000);
+
+// TO CHECK IF WE'RE CONNECTED TO MONGODB
+// mongoose
+//   .connect(CONNECTION_STRING, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => console.log("Connected to MongoDB"))
+//   .catch((err) => console.error("MongoDB connection error:", err));
